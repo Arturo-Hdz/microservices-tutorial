@@ -75,14 +75,14 @@ public class UsuarioControlador {
 		return ResponseEntity.ok(motos);
 	}
 
-	@CircuitBreaker(name = "carrosCB", fallbackMethod = "fallBackSaveCarros")
+	@CircuitBreaker(name = "carrosCB", fallbackMethod = "fallBackSaveCarro")
 	@PostMapping("/carro/{usuarioId}")
 	public ResponseEntity<Carro> guardarCarro(@PathVariable("usuarioId") int usuarioId, @RequestBody Carro carro) {
 		Carro nuevoCarro = usuarioServicio.saveCarro(usuarioId, carro);
 		return ResponseEntity.ok(nuevoCarro);
 	}
 
-	@CircuitBreaker(name = "motosCB", fallbackMethod = "fallBackSaveMotos")
+	@CircuitBreaker(name = "motosCB", fallbackMethod = "fallBackSaveMoto")
 	@PostMapping("/moto/{usuarioId}")
 	public ResponseEntity<Moto> guardarMoto(@PathVariable("usuarioId") int usuarioId, @RequestBody Moto moto) {
 		Moto nuevoMoto = usuarioServicio.saveMoto(usuarioId, moto);
@@ -98,25 +98,25 @@ public class UsuarioControlador {
 	}
 
 	private ResponseEntity<List<Carro>> fallBackGetCarros(@PathVariable("usuarioId") int id,
-			RuntimeException exception) {
+			RuntimeException excepcion) {
 		return new ResponseEntity("El usuario: " + id + "tiene los carros en el taller", HttpStatus.OK);
 	}
 
-	private ResponseEntity<Carro> fallBackSaveCarros(@RequestBody Carro carro, @PathVariable("usuarioId") int id,
-			RuntimeException exception) {
+	private ResponseEntity<Carro> fallBackSaveCarro(@PathVariable("usuarioId") int id, @RequestBody Carro carro,
+			RuntimeException excepcion) {
 		return new ResponseEntity("El usuario: " + id + "no tiene dinero para los carros", HttpStatus.OK);
 	}
 
-	private ResponseEntity<List<Moto>> fallBackGetMotos(@PathVariable("usuarioId") int id, RuntimeException exception) {
+	private ResponseEntity<List<Moto>> fallBackGetMotos(@PathVariable("usuarioId") int id, RuntimeException excepcion) {
 		return new ResponseEntity("El usuario: " + id + "tiene las motos en el taller", HttpStatus.OK);
 	}
 
-	private ResponseEntity<Moto> fallBackSaveMotos(@RequestBody Moto moto, @PathVariable("usuarioId") int id,
-			RuntimeException exception) {
+	private ResponseEntity<Moto> fallBackSaveMoto(@PathVariable("usuarioId") int id, @RequestBody Moto moto,
+			RuntimeException excepcion) {
 		return new ResponseEntity("El usuario: " + id + "no tiene dinero para las motos", HttpStatus.OK);
 	}
 
-	private ResponseEntity<Map<String, Object>> fallBackGetTodos(@PathVariable("usuarioId") int id, RuntimeException exception) {
+	private ResponseEntity<Map<String, Object>> fallBackGetTodos(@PathVariable("usuarioId") int id, RuntimeException excepcion) {
 		return new ResponseEntity("El usuario: " + id + "tiene los vehiculos en el taller", HttpStatus.OK);
 	}
 
